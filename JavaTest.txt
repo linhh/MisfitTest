@@ -1,0 +1,82 @@
+Java developers
+
+a. What are the differences between classes such as String and StringBuffer?
+
+- String is immutable in Java:  String is by design immutable in Java you can check this post for reason. Immutability offers lot of benefit to the String class e.g. his hashcode value can be cached which makes it a faster hashmap key and one of the reason why String is a popular key in HashMap. Because String is final it can be safely shared between multiple threads  without any extra synchronization.
+
+- When we represent string in double quotes like "abcd" they are referred as String literal and String literals are created in String pools. When you compare two String literals using equality operator "==" it returns true because they are actually same instance of String. Anyway comparing object with equality operator is bad practice in Java and you should always use equals method to check equality.
+
+- "+" operator is overloaded for String and used to concatenated two string. Internally "+" operation is implemented using either StringBuffer or StringBuilder.
+
+- Strings are backed up by character Array and represented in UTF-16 format. By the way this behavior can cause memory leak in String because same character array is shared between source String and SubString which can prevent source String from being garbage collected.
+
+- String class overrides equals() and hashcode() method and two Strings are considered to be equal if they contain exactly same character in same order and in same case. If you want ignore case comparison of two strings consider using equalsIgnoreCase() method
+
+- toString() method provides String representation of any object and its declared in Object class and its recommended for other class to implement this and provide String representation.
+
+- String is represented using UTF-16 format in Java
+
+- In Java you can create String from char array, byte array, another string, from StringBuffer or from StringBuilder. Java String class provides constructor for all of these.
+
+
+b. Describe the difference between classes such as Vector and ArrayList, and Hashtable and HashMap.
+
+* Vector vs ArrayList:
+  - Vector is synchronized whereas ArrayList is not synchronized. However if you are looking for modification of list while iterating, you should use CopyOnWriteArrayList.
+  - ArrayList is faster than Vector because it doesn’t have any overhead because of synchronization.
+  - ArrayList is more versatile because we can get synchronized list or read-only list from it easily using Collections utility class.
+  
+* HashMap vs Hashtable:
+  - HashMap allows null key and values whereas Hashtable doesn’t allow null key and values.
+  - Hashtable is synchronized but HashMap is not synchronized. So HashMap is better for single threaded environment, Hashtable is suitable for multi-threaded environment.
+  - LinkedHashMap was introduced in Java 1.4 as a subclass of HashMap, so incase you want iteration order, you can easily switch from HashMap to LinkedHashMap but that is not the case with Hashtable whose iteration order is unpredictable.
+  - HashMap provides Set of keys to iterate and hence it’s fail-fast but Hashtable provides Enumeration of keys that doesn’t support this feature.
+  - Hashtable is considered to be legacy class and if you are looking for modifications of Map while iterating, you should use ConcurrentHashMap.
+
+  
+c. What are the relationship between the equals() and hashCode() method?
+
+- HashMap uses Key object hashCode() and equals() method to determine the index to put the key-value pair. These methods are also used when we try to get value from HashMap. If these methods are not implemented correctly, two different Key’s might produce same hashCode() and equals() output and in that case rather than storing it at different location, HashMap will consider them same and overwrite them.Similarly all the collection classes that doesn’t store duplicate data use hashCode() and equals() to find duplicates, so it’s very important to implement them correctly. The implementation of equals() and hashCode() should follow these rules.
+
+If o1.equals(o2), then o1.hashCode() == o2.hashCode() should always be true.
+If o1.hashCode() == o2.hashCode is true, it doesn’t mean that o1.equals(o2) will be true.
+
+d. What are the difference between Nested Class and Inner Class?
+* Nested Class:
+  - A nested class is a class defined inside the definition (body) of another enclosing class. A nested class can be of two types - static or non-static. A nested class is treated as a member of the enclosing class. A static nested class is not very tightly integrated with the enclosing class and it lives its own independent life as well i.e., a static nested class can be instantiated like any other class from just about anywhere. They are defined inside the definition of an enclosing class just to get a logical grouping of the classes, which in turn increases readability and provides better packaging convenience.
+  - A static nested class can't directly access the members of the enclosing class. Like any other top-level class it needs to access the members of the enclosing class via object references only.
+  
+* Inner Class:
+  - A non-static nested class is called an inner class and it's tightly integrated with the enclosing class unlike a static nested class. An inner class instance can't exist independent to the enclosing class instance. An inner class instance always exist within the instance of the enclosing class. Since, it's always associated with the enclosing class instance and it has direct access to all the members of the enclosing class - even the private members.
+  
+- Inner Class cannot declare static members
+
+
+f. What are the differences between sleep() and wait()?
+
+- A wait can be "woken up" by another process calling notify on the monitor which is being waited on whereas a sleep cannot. Also a wait (and notify) must happen in a block synchronized on the monitor object whereas sleep does not:
+
+Object mon = ...;
+synchronized (mon) {
+    mon.wait();
+}
+
+At this point the currently executing thread waits and releases the monitor. Another thread may do
+
+synchronized (mon) { mon.notify(); }
+(On the same mon object) and the first thread (assuming it is the only thread waiting on the monitor) will wake up.
+
+- you call wait on Object itself (i.e. you wait on an object's monitor) whereas you call sleep on Thread.
+
+- Another point is that you can get spurious wakeups from wait (i.e. the thread which is waiting resumes for no apparent eason)
+
+
+
+g. In what situations will there be memory leaks in Java? Describe one of them you know?
+-You can have a situation where unwanted objects cannot be garbage collected, and hang around tying up memory ... a memory leak.
+
+
+h. Given following code: What is the output and why?
+
+Th output is "test.myclass@42719c" is the refernces to the instance of myclass, transform to strings
+
