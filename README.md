@@ -1,7 +1,7 @@
 MisfitTest
 ==========
 
-SourceCode and answered file for misfit test. All sourcecodes and test file were submmited before 18:00pm 05/13/2013.
+SourceCode and answered file for misfit test. All sourcecodes and test file were submmitted before 18:00pm 05/13/2013.
 
 These sourcecodes were built and run on my laptop. I programmed using CodeBlock 10.05 on Kubuntu 12.04.
 If you have any questions, please contact me.
